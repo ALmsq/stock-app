@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios'
 import _ from 'lodash'
 import SearchBar from './components/SearchBar/SearchBar'
+import StockList from './components/StockList/StockList'
 
 
-class App extends Component {
+class App extends React.Component {
   state = {
     stocks: [],
     term: null,
@@ -35,12 +36,15 @@ handleClick = (e) =>{
     console.log(res.data);
     let data = res.Data
     // console.log(res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }]));
-    let stocks = res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
-
+    // let stocks = res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
+    let stocks = _.flattenDeep(Array.from(res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])))
+    // console.log(_.flattenDeep(Array.from(res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }]))));
     // let stocks = matches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
     // let stocks = res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
     console.log(stocks);
+
     this.setState((state, props) => {
+      // debugger
         return {...state, stocks}
     })
   })
@@ -80,11 +84,14 @@ handleClick = (e) =>{
     // console.log(stocks);
       return(
         <div>
+          <h1>Stocks</h1>
           <SearchBar
             value={value}
             onChange={this.handleChange}
             onClick={this.handleClick}
-
+          />
+          <StockList
+            stockItems = {stocks}
           />
         </div>
       )
