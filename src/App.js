@@ -33,15 +33,15 @@ handleClick = (e) =>{
   axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${term}&apikey=QZ4L2TSNZBWXXVTO`)
   .then(res => {
     console.log(res.data);
-    const data = res.Data
-    let matches  = data.bestMatches
-    let stocks = matches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
+    let data = res.Data
+    // console.log(res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }]));
+    let stocks = res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
+
+    // let stocks = matches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
+    // let stocks = res.data.bestMatches.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }])
     console.log(stocks);
     this.setState((state, props) => {
-        return {
-          ...state,
-          stocks
-        }
+        return {...state, stocks}
     })
   })
   .catch(error => console.log(error))
@@ -52,6 +52,8 @@ handleClick = (e) =>{
 //   // axios.get(`https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=USD&apikey=QZ4L2TSNZBWXXVTO`)
 //   .then(res => {
 //     const data = res.data
+//     console.log();
+//     // console.log(data.map((stock)=>[{symbol: stock['1. symbol'], name: stock['2. name'] }]));
 //     // console.log(_.flattenDeep(Array.from(data)))
 //     let matches = data.bestMatches
 //     console.log(matches)
@@ -75,6 +77,7 @@ handleClick = (e) =>{
     // console.log(this.handleChange);
     let stocks = this.state.stocks
     const value = this.state.value
+    // console.log(stocks);
       return(
         <div>
           <SearchBar
